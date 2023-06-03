@@ -15,22 +15,14 @@ size_t print_list(const list_t *h)
 {
 	size_t occurrence = 0;
 
-	if (h == NULL)
+	while (h)
 	{
-		return (occurrence);
-	}
-
-	do {
-		if (h->str != NULL)
-		{
-			printf("[%u]%s\n", h->len, h->str);
-		} else
-		{
+		if (!h->str)
 			printf("[0] (nil)\n");
-		}
-		occurrence++;
+		else
+			printf("[%u]%s\n", h->len, h->str);
 		h = h->next;
-	} while (h != NULL);
-
+		occurrence++;
+	}
 	return (occurrence);
 }
