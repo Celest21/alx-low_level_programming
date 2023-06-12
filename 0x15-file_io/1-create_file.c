@@ -1,44 +1,56 @@
 #include "main.h"
 
 /**
-  * create_file - creates a file and adds text content to it
-  * @filename: pointer to name the file being created
-  * @text_content: pointer to a string to write to file
+  * create_file - makes a file
+  * @filename: name of file
+  * @text_content: content in file
   *
-  * Return: 1 on success, or -1 if it fails
+  * Return: 1 if successful and -1 if it fails
   */
 
 int create_file(const char *filename, char *text_content)
 {
-	/*variables for file operations*/
-	int fd, len, w = 0;
+	/*file descriptor*/
+	int fd;
+	/*no of letters in text_content*/
+	int nletters;
+	/*no of bytes*/
+	int rwr;
+
 
 	/*return -1 if filename is NULL*/
-	if (filename == NULL)
+	if (!filename)
 		return (-1);
 
-	if (text_content != NULL)
-	{
-		for (len = 0; text_content[len];)
-			/*calculate the lenght of the content*/
-			len++;
-	}
+	/*specifying how file is created*/
+	fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 
-	/*open the file with create, read or write and truncate flags*/
-	fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0600);
-
-	/*write text to the file*/
-	w = write(fd, text_content, len);
-
-	/*check if opening or writing to file failed*/
-	if (fd == -1 || w == -1)
-		/* if error return -1*/
+	/*return -1 if file cant be opened*/
+	if (fd == -1)
 		return (-1);
 
-	/*close file*/
+	/*if text is NULL set it to a empty string*/
+	if (!text_content)
+		text_content = "";
+
+	/*count no of letters in text_content*/
+	for (nletters = 0; text_content[nletters]; nletters++)
+		;
+
+	/*write text_content to file*/
+	rwr = write(fd, text_content, nletters);
+
+	/*if there is errors writing return -1*/
+	if (rwr == -1)
+		return (-1);
+
+	/*close the file*/
 	close(fd);
 
-	/*if successful retun 1*/
+	/*return 1 if successful*/
 	return (1);
+
 }
+
+
 
